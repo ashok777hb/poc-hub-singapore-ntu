@@ -62,8 +62,8 @@ fi
 # stored. If there is, we stop immediately and expect the user to work
 # out why there is a directory mounted and unmount it so we can continue.
 
-if mount | grep " on /mnt " > /dev/null 2>&1; then
-    echo "ERROR: The temporary mount directory /mnt is already in use."
+if mount | grep " on /mnt1 " > /dev/null 2>&1; then
+    echo "ERROR: The temporary mount directory /mnt1 is already in use."
     exit 1
 fi
 
@@ -71,7 +71,7 @@ fi
 # Check whether mounted in a loop in case doesn't show as mounted
 # immediately.
 
-mount "$NFS_SERVER_NAME:$NFS_SERVER_SHARE" /mnt
+mount "$NFS_SERVER_NAME:$NFS_SERVER_SHARE" /mnt1
 
 if [ "$?" != "0" ]; then
     echo "ERROR: $NFS_SERVER_NAME:$NFS_SERVER_SHARE could not be mounted."
@@ -81,7 +81,7 @@ fi
 MOUNTED=0
 
 for _ in {1..5}; do
-    if mount | grep "$NFS_SERVER_SHARE on /mnt " > /dev/null 2>&1; then
+    if mount | grep "$NFS_SERVER_SHARE on /mnt1 " > /dev/null 2>&1; then
         MOUNTED=1
         break
     fi
@@ -89,7 +89,7 @@ for _ in {1..5}; do
 done
 
 if [ "$MOUNTED" != "1" ]; then
-    echo "ERROR: NFS share $NFS_SERVER_SHARE not showing as mounted on /mnt."
+    echo "ERROR: NFS share $NFS_SERVER_SHARE not showing as mounted on /mnt1."
     exit 1
 fi
 
@@ -134,6 +134,6 @@ fi
 umount /mnt
 
 if [ "$?" != "0" ]; then
-    echo "ERROR: Could not unmount the directory /mnt."
+    echo "ERROR: Could not unmount the directory /mnt1."
     exit 1
 fi
